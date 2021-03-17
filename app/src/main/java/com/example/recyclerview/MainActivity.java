@@ -2,7 +2,6 @@ package com.example.recyclerview;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.Objects;
+
 
 import java.util.LinkedList;
 
@@ -18,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private final LinkedList<String> mWordList = new LinkedList<>();
 
     private RecyclerView mRecyclerView;
-    private WordListAdapter mAdapter;
 
 
     @Override
@@ -36,20 +36,20 @@ public class MainActivity extends AppCompatActivity {
                 // Add a new word to the wordList.
                 mWordList.addLast("+ Word " + wordListSize);
                 // Notify the adapter, that the data has changed.
-                mRecyclerView.getAdapter().notifyItemInserted(wordListSize);
+                Objects.requireNonNull(mRecyclerView.getAdapter()).notifyItemInserted(wordListSize);
                 // Scroll to the bottom.
                 mRecyclerView.smoothScrollToPosition(wordListSize);;
             }
         });
         // Put initial data into the word list.
-        for (int i = 0; i < 20; i++) {
-            mWordList.addLast("Word " + i);
+        for (int i = 0; i < 21; i++) {
+            mWordList.add("Word " + i);
         }
 
         // Get a handle to the RecyclerView.
         mRecyclerView = findViewById(R.id.recyclerview);
         // Create an adapter and supply the data to be displayed.
-        mAdapter = new WordListAdapter(this, mWordList);
+        WordListAdapter mAdapter = new WordListAdapter(this, mWordList);
         // Connect the adapter with the RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // Give the RecyclerView a default layout manager.
@@ -66,16 +66,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        int id = item.getItemId();
+        if (id == R.id.action_reset) {
+            mWordList.clear();
+            for (int i = 1; i < 21; i++) {
+                mWordList.add("Word " + i);
+            }
+            Objects.requireNonNull(mRecyclerView.getAdapter()).notifyDataSetChanged();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

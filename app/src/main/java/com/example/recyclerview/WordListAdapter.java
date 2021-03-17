@@ -26,7 +26,7 @@ public class WordListAdapter extends
         final WordListAdapter mAdapter;
 
 
-        public WordViewHolder(View itemView, WordListAdapter adapter) {
+        WordViewHolder(@NonNull View itemView, WordListAdapter adapter) {
             super(itemView);
             wordItemView = itemView.findViewById(R.id.word);
             this.mAdapter = adapter;
@@ -49,22 +49,23 @@ public class WordListAdapter extends
         }
     }
 
-    public WordListAdapter(Context context,
+     WordListAdapter(Context context,
                            LinkedList<String> wordList) {
         mInflater = LayoutInflater.from(context);
         this.mWordList = wordList;
     }
 
+    @NonNull
     @Override
-    public WordViewHolder onCreateViewHolder(ViewGroup parent,
-                                             int viewType) {
+    public WordListAdapter.WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View mItemView = mInflater.inflate(R.layout.wordlist_item,
                 parent, false);
         return new WordViewHolder(mItemView, this);
     }
 
     @Override
-    public void onBindViewHolder(WordViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WordListAdapter.WordViewHolder holder, int position) {
         String mCurrent = mWordList.get(position);
         holder.wordItemView.setText(mCurrent);
     }
